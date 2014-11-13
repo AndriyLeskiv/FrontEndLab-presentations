@@ -72,30 +72,30 @@ There ara couple Javascript object or HTML tags that can provide server-client c
 - XMLHttpRequest
 
 - Text
-    ''' javascript
-    elem.innerText = xhr.responseText
-    '''
+    <pre class="brush: jscript">
+        elem.innerText = xhr.responseText
+    </pre>
 
 - HTML
-    ''' javascript
-    elem.innerHTML = xhr.responseText
-    '''
+    <pre class="brush: jscript">
+        elem.innerHTML = xhr.responseText
+    </pre>
 
 - XML
   Server should set "Content-Type: text/xml"
-    ''' javascript
-    var xml = xhr.responseXML
-    '''
+    <pre class="brush: jscript">
+        var xml = xhr.responseXML
+    </pre>
 
 - JSON (Javascript Object Notation)
-    ''' javascript
-    var obj = eval( '(' + responseText + ')')
-    '''
+    <pre class="brush: jscript">
+        var obj = eval( '(' + responseText + ')')
+    </pre>
 
-- JSONP 
-    ''' javascript
-    callback({{ "response": { "size": "370", "price":"200" }}})
-    '''
+- JSONP
+    <pre class="brush: jscript">
+        callback({{ "response": { "size": "370", "price":"200" }}})
+    </pre>
 
 
 ---
@@ -106,9 +106,9 @@ There ara couple Javascript object or HTML tags that can provide server-client c
 
 JSONP or "JSON with padding" is a complement to the base JSON data format. It provides a method to request data from a server in a different domain, something prohibited by typical web browsers because of the same origin policy.
 
- '''  javascipt
-callbackFunction({{ "response": { "size": "370", "price":"200" }}})
-'''
+<pre class="brush: jscript">
+    callbackFunction({{ "response": { "size": "370", "price":"200" }}})
+</pre>
 
 While the padding (prefix) is typically the name of a callback function that is defined within the execution context of the browser, it may also be a variable assignment, an if statement, or any other JavaScript statement.The response to a JSONP request is not JSON and is not parsed as JSON; the returned payload can be any arbitrary JavaScript expression, and it does not need to include any JSON at all. But conventionally, it is a JavaScript fragment that invokes a function call on some JSON- formatted data.
 
@@ -237,7 +237,9 @@ script.onreadystatechange = function() {
 
 # Iframe
 
-Iframe - the most cross-browser transport, is its main advantage. It works everywhere from IE6 to Opera Mobile. To communicate with the server creates an invisible iframe. It sends data to itself and the server writes the answer.
+Iframe - the most cross-browser transport, is its main advantage. It works everywhere from IE6 to Opera Mobile.
+
+To communicate with the server creates an invisible iframe. It sends data to itself and the server writes the answer.
 
 
 
@@ -371,44 +373,64 @@ Comet long polling works like any standard use of XHR. The browser makes an asyn
 
 
 # COMET via iframe
+.litle[
 
-The classic style - this is when a browser creates an invisible IFRAME, leading to the service URL. Server receives a connection to this URL, not close it, and from time to time send the message blocks ***'<script> ... javascript ... </ script>'***. Appeared in IFRAME'e javascript immediately runs by browser, passing information to the main page. 
 
--  Create ***'<iframe src="COMET_URL">'***, at COMET_URL server is located.
+The classic style - this is when a browser creates an invisible IFRAME, leading to the service
+URL. Server receives a connection to this URL, not close it, and from time to time send
+the message blocks
+```html
+        <script>...javascript...</script >
+```
+Appeared in IFRAME'e javascript immediately runs by browser, passing information to the main page.
+```
+
+```
+-  Create
+```html
+        <iframe src="COMET_URL">
+```
+at COMET_URL server is located.
 
 -  Server gives the beginning ("head") of the document and stops, leaving the connection active. 
 
--  When the server wants to send something - he writes in connection     
-   ***'<script> parent.onMessage (message) </ script>'***
-   The browser immediately executes this script - so the message comes to the client. 
+-  When the server wants to send something - he writes in connection
+```html
+   <script> parent.onMessage (message) </script>
+```
+The browser immediately executes this script - so the message comes to the client.
 
--  Iframe in theory loading indefinitely. Its means an open communication channel. It can catch on 
-   'iframe.onload' and reopen the connection (create a new iframe).
+-  Iframe in theory loading indefinitely. Its means an open communication channel.
+It can catch on <span class="scriptCode"> iframe.onload </span> and reopen the connection (create a new iframe).
+
+]
+
+
+
 
 ---
-
 
 
 # EventSource
 
 The EventSource interface is used to manage server-sent events. You can set the onmessage attribute to a 
 JavaScript function to receive non-typed messages (that is, messages with no event field). You can also call 
-***' addEventListener()'***  to listen for events just like any other event source.
+<span class="scriptCode"> addEventListener()</span>  to listen for events just like any other event source.
 
 ***Methods***:
 .litle[
-- *** ' close' *** - Closes the connection, if any, and sets the readyState attribute to CLOSED. If the connection is already closed, the method does nothing.
+- <span class="scriptCode">  close </span> - Closes the connection, if any, and sets the readyState attribute to CLOSED. If the connection is already closed, the method does nothing.
 
-- *** 'addEventListener' ***- method for creating custom events
+- <span class="scriptCode"> addEventListener </span>- method for creating custom events
 ]
 
 *** Attributes ***: 
 .litle[
--  ***'onerror'*** [event]- A JavaScript function to call when an error occurs.
--  ***'onmessage'*** [event] - A JavaScript function to call when an a message without an event field arrives.  
--  ***'onopen'*** [event] - A JavaScript function to call when the connection has opened.
--  ***'readyState'***  [long] - The state of the connection, must be one of CONNECTING, OPEN, or CLOSED. Read only.
--  ***'url'*** [string] - Read only.
+-  <span class="scriptCode">onerror</span> [event]- A JavaScript function to call when an error occurs.
+-  <span class="scriptCode">onmessage</span> [event] - A JavaScript function to call when an a message without an event field arrives.
+-  <span class="scriptCode">onopen</span> [event] - A JavaScript function to call when the connection has opened.
+-  <span class="scriptCode">readyState</span>  [long] - The state of the connection, must be one of CONNECTING, OPEN, or CLOSED. Read only.
+- <span class="scriptCode">url</span> [string] - Read only.
 ]
 .litle[
 ***Browsers***: all,except IE 
