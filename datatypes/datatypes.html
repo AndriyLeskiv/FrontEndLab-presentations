@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Types</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../assets/css/base.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <header>
+        <img class="epam-logo" src="../assets/img/logo.png"/>
+        <h1>JS types</h1>
+    </header>
+
+<!-- ================== Slides ================== -->
+    <textarea id="source">
+
+
+class: center, middle
+
+.title[
+Front-end training
+# JS Types
+]
+
+
+
+---
+
+# Introduction
+
+Values have _types_. Types determine value properties.
+
+For example: you can multiply two numbers, but can't multiply two strings. It's
+because multiplication rules are not defined for strings.
+
+---
+
+# Data types in JS
+
+Primitives:
+
+- Number (all numbers, including floating point)
+- Boolean (true & false)
+- String (everyting inside '' or "")
+- Null (nothing)
+- Undefined (not yet defined)
+
+And 'king-of-all-types':
+
+- Object
+
+---
+
+# Objects
+
+Basically object is a set of 'key-value' pairs gathered with a same name.
+
+```
+var objectName = {
+  keyName: 'keyValue',
+  'otherKeyName': 'otherKeyValue'
+};
+```
+
+`keyName` may be a string or a label.
+
+This 'key-value' pair called _properties_.
+
+You may take a value of object specifying object name, and key which you would like to use.
+
+```
+console.log(objectName.keyName); // -> keyValue
+```
+
+Also you may use _brackets-notation_, like:
+
+```
+console.log(objectName['keyName']); // -> keyValue
+```
+
+---
+
+# Objects (cont.)
+
+Sometimes it is neccessary to use brackets-notation, since you may have key name in variable, like
+
+```
+var k = 'keyName';
+console.log(objectName[k]); // -> 'keyValue'
+k = 'otherKeyName';
+console.log(objectName[k]); // -> 'otherKeyValue'
+```
+
+Functions can be values too. Such functions called _methods_.
+
+```
+var obj = {
+  fn: function() {
+    console.log('method called');
+  }
+};
+obj.fn(); // -> 'method called'
+```
+
+---
+
+# Iterating over object
+
+You may iterate over object's using `for..in` loop:
+
+```
+var obj = {
+  one: 1,
+  two: 2
+};
+for (var key in obj) {
+  console.log(key, obj[key]);
+}
+
+// -> one, 1
+// -> two, 2
+```
+
+ES5 added `Object.keys(obj);` method which return list of keys defined for object.
+
+---
+
+# Everything is an Object
+
+In javascript (unlike many other languages) _every_ value is an object. So it can have any methods and properties assigned.
+
+And every object automatically have two important methods: `.toString` and `.valueOf`.
+
+`.toString` is used when you need to convert value to string.
+
+`.valueOf` used when you need to take value of any object.
+
+For example: `255..toString('16') == 'ff'`
+
+.toString() method, defined for numbers will convert number to string with base 16 (HEX).
+
+---
+
+# Arrays
+
+Arrays are set of values, which are stored in _ordered_ manner.
+
+To get value from array you need to get it by index using brackets ([]).
+
+Note: in JS (like in all C-based languages) array indexing begins with 0. So first element has index 0 and last element has index 'length - 1'.
+
+To create an array you may use []-notation:
+
+```
+var array = [1, 2, 3, 4, 5];
+array[0] == 1; // true
+array[array.length - 1] == 5; // true
+```
+
+---
+
+# Useful array methods
+
+- `[].length` How many elements stored in array
+
+- `[].indexOf(el)` Return index of element in array, return -1 if no such element found. Note: doesn't work in older browsers.
+
+- `[].join(separator)` Concatenate values of array using 'separator'.
+Example: `[1, 2, 3, 4, 5].join(';') == '1;2;3;4;5';`
+
+- `[].push(value)` Append value to the end of array
+
+- `[].pop()` Remove and return last value of array, Example:
+
+```
+var x = [1, 2];
+x.pop(); -> 2
+x; // [1]
+```
+
+---
+
+# Sorting arrays
+
+[].sort(fn) Sort array using `fn` as 'comparator'.
+
+Comparator should take two values and return -1, 0 or 1 according to next rules:
+
+- If _value 1_ should settle in array _earlier_ than value 2; `-1`
+
+- If _value 2_ should settle in array _earlier_ than value 1: `1`
+
+- If values should be leaved when they are: `0`
+
+
+For example - sort array in _descending_ order.
+
+```
+[1, 2, 3, 4, 5].sort(function(one, two) {
+  return one < two ? 1 : (one > two ? -1 : 0);
+}); // -> [5, 4, 3, 2, 1]
+```
+
+
+---
+
+# Javascript is _dynamic_ language
+
+Unlike _static_ type languages JS allow you to change value of variable using different types.
+
+```
+var x = 1;
+x = 'string now';
+x = {
+  wow: 'an object now!'
+};
+```
+
+Also objects are dynamic in javascript: you may change object properties anywhere:
+
+```
+var obj = {}; // it is empty, thus useless :(
+obj.value = 1; // now it is `{ value: 1 }'
+obj.fn = function() {
+  console.log('test');
+};
+obj.fn(); // -> 'test'
+delete obj.value;
+```
+
+---
+
+# Conversion rules
+
+When you want to use a value as value of _another_ type, JS will perform type conversion:
+
+| Value     | Number | String         | Boolean |
+|-----------|--------|----------------|---------|
+| undefined | NaN    | "undefined"    | false   |
+| null      | 0      | "null"         | false   |
+| Boolean   | 1/0    | "true"/"false" | ---     |
+| ''        | 0      | ---            | false   |
+| '1.1'     | 1.1    | ---            | true    |
+| 'asdf'    | NaN    | ---            | true    |
+| 0         | ---    | "0"            | false   |
+| 1         | ---    | "1"            | true    |
+
+[More rules can be found here](http://bonsaiden.github.io/JavaScript-Garden/#types)
+
+
+---
+
+# String-Number & Number-String conversions
+
+When you try to concatenate number with string, all expression will be converted to string.
+
+Note: conversion to string will begin only after first string in expression found, e.g
+
+``` 1 + '1' + 1 == '111' ```
+
+But:
+
+``` 1 + 1 + '1' == '21' ```
+
+This is because `1 + 1` (both numbers) occurs _before_ string in expression, so
+expression became `2 + '1'`.
+
+---
+
+# String-Number & Number-String conversions (cont.)
+
+If you need a string you may either use '.toString()' method or simply add '' (empty string) before all expression:
+
+``` '' + 1 + 1 + '1' == '111' ```
+
+If you need to use numeric-values, you may use 'parseInt', 'parseFloat' or '+' to convert string to number explicitly:
+
+```
+parseInt('10', 10); // -> 10
+parseFloat('10', 10) ; // -> 10
++'10' // -> 10;
+```
+
+So: `1 + 1 + +'1' == 3`
+
+---
+
+# Equality comparisons
+
+There are two equality operators in JS:
+
+- '==' compare values in non-strictly manner, converting values to same type
+- '===' compare values in strict manner, w/ type checking
+
+E.g:
+
+``` (1 == '1') == true ```
+
+But:
+
+``` (1 === '1') == false ```
+
+---
+
+# Falsy values
+
+Some values in JS are so-called _falsy-values_, e.g. they are evaluated to 'false' every time
+you need a boolean value (like in if, while, etc..).
+
+These are: `null, undefined, false, 0, '' (empty string), NaN`.
+
+Sometimes this can lead to mistakes. For example - usual way to check function parameter:
+
+```
+function needOneParameter(param) {
+  if (!param) { // if param wasn't passed
+    return 'no param';
+  }
+}
+```
+
+may lead to wrong behaviour, when:
+
+```
+needOneParameter(0);
+needOneParameter('');
+```
+
+---
+
+# Falsy values (cont.)
+
+Possible solutions (note '===', because `undefined == null`) :
+``` param === undefined ```
+
+But sometimes ppl afraid that somebody _can_ change value of `undefined` (it's just a variable in JS), so they prefers:
+
+```typeof param == 'undefined'```
+
+---
+
+# Object equality 
+
+Note: as in many other languages comparison of objects in js is a kinda different thing.
+When you use '==' or '===' you basically asking 'is it a _same_ object?'
+(e.g. is this variable and this variable refers to same object).
+
+Technically (from the JS VM perspective) it is correct, but it isn't correct _logically_, since
+objects may be considered _equal_ only when they share a same set of keys with same values.
+
+E.g. `var obj = {one: 1}; var obj2 = {one: 1};` are not equal technically (different objects),
+but are _logically equal_.
+
+`obj1 == obj2` will be false.
+
+---
+
+# Naive objects equality comparison function implementation
+
+```
+function naiveEquals(obj1, obj2) {
+  function equals(o1, o2) {
+    for (var key in o1) {
+      if (o2.hasOwnProperty(key)) {
+        if (o2[key] != o1[key]) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  return equals(obj1, obj2) && equals(obj2, obj1);
+}
+```
+
+Or better use some library where .equals implemented :)
+
+
+
+
+
+
+    </textarea>
+<!-- ================== End of Slides ================== -->
+
+    <script src="../assets/js/remark-latest.min.js" type="text/javascript"></script>
+    <script type="text/javascript">remark.create({
+      highlightStyle: 'github',
+      highlightLanguage: 'javascript'
+    });</script>
+</body>
+</html>

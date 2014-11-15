@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lesson 16</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../assets/css/base.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <header>
+        <img class="epam-logo" src="../assets/img/logo.png"/>
+        <h1>JS Std Lib</h1>
+    </header>
+
+<!-- ================== Slides ================== -->
+    <textarea id="source">
+
+
+class: center, middle
+
+.title[
+Front-end training
+# Standard Library, RegExp
+]
+
+---
+
+# Delayed execution
+
+`var timer = setTimeout(fn, ms);` execute `fn` after `ms` milliseconds.
+
+`clearTimeout(timer);` prevent execution of early setted timeout. 
+
+`var interval = setInterval(fn, ms);` execute `fn` after every `ms` (multiple executions).
+
+`clearInterval(interval);` stop interval execution.
+
+Added in newer versions - execute `fn` after 1/60 of second. Useful for animations.
+
+```
+var animFrame = requestAnimationFrame(fn);
+cancelAnimationFrame(animFrame);
+```
+
+---
+
+# Image object
+
+Manipulating images in JS may be executed using Image object:
+
+```
+var image = new Image();
+
+// set source of image
+image.src = 'image.jpg';
+
+// set dimensions of image
+image.width = 100;
+image.height = 100;
+
+// Note: all 'onXXX' events may be listened with node.addEventListener('XXX', fn);
+image.onerror = function() {
+  console.error('error');
+  // set new source, to indicate that it wasn't found
+  this.src = 'error.jpg';
+};
+
+image.onload = function() {
+  console.log('image loaded');
+};
+
+// add image to body
+document.body.appendChild(image);
+```
+
+---
+
+# Forms
+
+```
+// HTML: <form id="form"><input type="text" name="input-text">...</form>
+var form = document.getElementById('form');
+
+var input = form.elements[0]; // NodeList of all elements in form. Also available as:
+input = form.elements['input-text']; // may be accessed by name.
+
+form.onsubmit = function(e) {
+  // simple validation, useful when html5 validation is not available.
+  if (this.elements['input-text'] == 'cansubmit') {
+    console.log('can submit');
+    return true;
+  } 
+  return false; // prevent form submit 
+};
+
+form.submit(); // submit form
+```
+---
+
+# Focus
+
+```
+// This callback executed when input get focus
+input.onfocus = function() {
+  console.log('input focused');
+};
+
+// Executed when node lost focus
+input.onblur = function(e) {
+  console.log('input focus lost, may do some in-place validations');
+  // next 2 lines prevent blur, so be careful, never 
+  //e.preventDefault();
+  //return false; 
+};
+
+// Manually set focus
+input.focus();
+
+// Manually remove focus
+input.blur();
+```
+
+---
+
+# Arrays & Strings
+
+```
+// Return array that is a copied original array, but with `counts` element removed
+// starting with `i` position.
+[].slice(i, count);
+
+// Change original array, removing `count` elements, starting with position `i`
+// and return removed elements. If `addElement..` providen - replace removed
+// elements with given.
+[].splice(i, count/*, addElement1, addElement2, ... */);
+
+// Replace first occurence of symbol `from` with symbol `to`
+''.replace(from, to);
+
+// Convert string to array with splitting it by delimeter.
+''.split(delimiter);
+
+// Get characters from string, starting with `from`, `length` characters.
+// If `from` is negative then counting begins from end of string (in reverse order).
+// If `length` is not set - take all chars starting with `from` to end of string.
+// If `length` = 0 || length < 0 - empty string returned.
+''.substr(from, length);
+```
+
+---
+
+# Numbers & Math
+
+```
+// Detect is value NaN
+isNaN(val);
+
+// Detect is val is a number (excluding Infinity, NaN, etc). Val may be a string.
+isFinite(val);
+
+// Return lesser one from 'a' and 'b'
+Math.min(a, b);
+
+// Return greater one from 'a' and 'b'
+Math.max(a, b);
+
+// Value of PI
+Math.PI; // 3.1415....
+
+// Trigonometry. Radians used, so use (degrees * Math.PI) / 180 to convert values from
+// degrees.
+Math.sin(angle); Math.cos(angle); //, ...
+```
+
+---
+
+# Numbers & Math (cont.)
+
+```
+Math.pow(x, y);
+
+Math.round(num);
+
+// round 'down', throw out decimal part.
+Math.floor(num);
+
+// round 'up', throw out decimal part & add 1.
+Math.ceil(num);
+
+// get random float number in range from 0 to 1.
+Math.random();
+
+//get random number from 0 to 100.
+Math.floor(Math.random() * 100)
+```
+
+---
+
+# Date
+
+```
+var d = new Date(); // you may pass string or timestamp in constructor
+
+Date.now(); // -- ES5, get timestamp in milliseconds
+
+d.getMonth(); // -- months started with 0!
+d.setMonth();
+```
+
+[All Date manipulation methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
+
+poor-man&apos;s profiler:
+```
+var then = Date.now();
+// some heavyweight code
+console.log(Date.now() - then); // detect how many time took execution of code
+```
+---
+
+# Location
+
+This object used to change URL in browser.
+
+```
+location.href; // get full URL
+location.protocol; // get protocol
+location.host; // get host, w/o url
+location.pathname; // get pathname, w/o hostname
+location.port; // get port
+location.hash; // get hash (#)
+location.search; // get search (?value=...)
+
+// you may set each of this properties, like
+location.href = 'http://google.com'; // redirect user browser to google.com
+location.hash = '#11';
+
+// this event fire when hash was changed
+window.onhashchange = function(e) {};
+
+// this event fire when user navigate away from page
+window.onunload = function(e) {};
+```
+---
+
+# Encoding/deconding
+
+Since some characters (like, /, ?, #, :, =, etc) are reserved for using as URL delimiters,
+as well as non-ascii characters (non-latin alphabet), you need to encode values in order
+to get correct result. Browsers use escape-sequences, containing '%xx', where xx is a symbol code.
+Up to 3 '%xx%yy%zz' may be used to encode some wide characters (like japanese symbols).
+
+```
+// Encode only non-latin characters, leave all url-specific symbols in place
+encodeURI(value);
+
+// Encode all not-allowed characters, including /, ?, ...
+encodeURIComponent(value);
+
+// Decode only non-latin characters
+decodeURI(value);
+
+// Decode all delimiter characters
+decodeURIComponent(value);
+```
+
+[Big Article Explaining URL and encodings](http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding)
+
+---
+
+# Navigator
+
+Used to detect client browser type.
+
+Since earlier many sites support only Netscape - all browsers use 'Mozilla' as 
+values for `appName`. This, actually, written in standard, so this property is not
+very useful.
+
+```
+// get user-agent string, which can be parsed and detect browser.
+navigator.userAgent;
+
+// Array of installed plugins. May be used to detect installed plugins, like Adobe Flash
+navigator.plugins;
+
+// Current system language
+navigator.language;
+
+// List of supported languages
+navigator.languages;
+
+// If user allows you to track his position you may use geolocation to retrieve
+// user current coordinates (HTML5)
+navigator.geolocation.getCurrentPosition(success, error);
+var positionChangeWatch = navigator.geolocation.watchPosition(success, error);
+navigator.geolocation.clearWatch(positionChangeWatch);
+```
+
+---
+
+# Local storage
+
+Used to store data on client-side.
+
+Data stored as simple key-value pairs, both strings.
+
+Local storage may be _constant_ (`localStorage`) or _session_ (`sessionStorage`). localStorage save values forever, when sessionStorage - only per browser session (e.g. until browser closed).
+
+`localStorage.setItem(key, value);` store value in storage
+
+`localStorage.getItem(key);` get value from storage. If value not exist - `null` returned.
+
+`localStorage.removeItem(key);` remove key-value pair from storage.
+
+`localStorage.clear();` remove all values from storage.
+
+Same methods available for `sessionStorage`.
+
+
+---
+
+# Dimensions
+
+`window.innerWidth` get page working area width.
+
+`window.innerHeight` get page working area height.
+
+---
+
+# RegExp
+
+Create regexp:
+
+/word/ -- pattern that match "word", using regex syntax
+
+var regexp = new RegExp('word', ''); -- pattern that mathc "word" using RegExp object.
+
+. - match _any_ character (except newline).
+
+Example: /o.o/ -- matches 'oao', 'obo', 'o o', 'o-o' ...
+
+^ - indicate beginning of line
+
+$ - indicate end of line
+
+Example: /^word$/ -- match lines that consist only of 'word'.
+
+Regexps are matched line by line.
+
+---
+
+# Calling regexp
+
+Methods:
+
+RegExp.test(string) - test "string" to match regexp.
+
+Example: `/world/.test('hello, world!'); // -> true`
+
+String.match(regexp); - match string, returning null if no matches found, array of matches otherwise.
+
+Example: `'hello, world'.match(/world/); // -> ["world"]
+
+Also regexp may be used in ''.replace:
+```
+'testtest'.replace(/test/, function(match) {
+  return match + '.';
+}); // test.test
+```
+
+---
+
+# Grouping
+
+Groups:
+
+[] - Character set, match any of given characters
+
+[a-z] - Any of lowercase letters.
+
+(...) - create "match group". This group will be saved in match results. May be called as $1..$9
+
+Example: wrap each word with '-':
+
+`'hello world'.replace(/(\w+)/g, '-$1-'); // '-hello- -world-`
+
+(?:...) - create match group, but no saving the result.
+
+---
+
+# Repeating
+
+{count} - previous symbol repeated exact 'count' times
+
+Example: /a{2}/ - match 'aa'.
+
+{x, y} - previous symbol (or group) repeated from "x" to "y" times. If no y provided - use 'infinite' times.
+
+Example: /a{1, 3}/ -- match 'a' or 'aa' or 'aaa'
+
+If 'y' is not passed - then 'infinity' used as it's value.
+
+Special symbols:
+
+'*' previous symbol repeated from 0 to infinite times. Equivalent {0,}
+
+'?' previous symbol repeated 0 or 1 times. Equivalent {0,1}
+
+'+' previous symbol repeated 1 to infinite times. Equivalent {1,}
+
+---
+
+# Modifiers
+
+g - global search, match all occurences.
+
+i - ignore case, match letters ignoring case.
+
+m - multiline, match all lines, not line by line.
+
+---
+
+# Symbol classes
+
+\d - digits
+
+\D - non-digits
+
+\w - word symbols [a-zA-Z0-9_]
+
+\W - non-word symbols
+
+\s - white-space symbols
+
+\S - non white-space symbols
+
+If you need to use some of reserved symbol as match you need to quote them with '\':
+
+Reserved symbols: (, ), \, /, *, +, ?, ., [, ]
+
+---
+
+# Further reading
+
+JS Library:
+
+The most complete lib of frontend:
+
+[Mozilla Developer Network](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects)
+
+Next 'big thing', leaded by W3C consortium and supported by all of major companies (but still work in progress):
+
+[WebPlatform.org](https://www.webplatform.org)
+
+RegExp:
+
+[Learning Regex The Hard Way](http://regex.learncodethehardway.org/book/)
+
+[The Bastards Book Of Regular Expressions*](https://leanpub.com/bastards-regexes)
+
+_*You may 'buy' it for 0$_
+
+    </textarea>
+<!-- ================== End of Slides ================== -->
+
+    <script src="../assets/js/remark-latest.min.js" type="text/javascript"></script>
+    <script type="text/javascript">remark.create({
+      highlightStyle: 'github',
+      highlightLanguage: 'javascript'
+    });</script>
+</body>
+</html>
