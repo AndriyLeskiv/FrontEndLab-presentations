@@ -110,29 +110,6 @@ and a few more...
 
 ---
 
-# Events
-
-### Event Handlers
-`on(), off(), one(), trigger(), triggerHandler()`
-
-### Form Events
-`focus(), blur(), change(), select(), submit()`
-
-### Keyboard Events
-`keydown(), keyup(), keypress()`
-
-### Mouse Events
-`click(), dblclick(), hover()`
-
-### Event Object
-`event.preventDefault(), event.stopPropagation(), event.target`
-
-Note: some events can be used as both handlers and triggers  
-`$('input').focus(handler)` -> attaches handler onFocus  
-`$('input').focus()` -> sets focus on input
-
----
-
 # DOM manipulations
 
 For convenience, some of these methods work as both getters and setters.  
@@ -188,6 +165,29 @@ Note: all of these methods accept configurations, e.g {duration: 500}
 
 `animate` - animates given css properties.  
 Note: in most cases it is wiser to use css animations as those are much faster
+
+---
+
+# Events
+
+### Event Handlers
+`on(), off(), one(), trigger(), triggerHandler()`
+
+### Form Events
+`focus(), blur(), change(), select(), submit()`
+
+### Keyboard Events
+`keydown(), keyup(), keypress()`
+
+### Mouse Events
+`click(), dblclick(), hover()`
+
+### Event Object
+`event.preventDefault(), event.stopPropagation(), event.target`
+
+Note: some events can be used as both handlers and triggers  
+`$('input').focus(handler)` -> attaches handler onFocus  
+`$('input').focus()` -> sets focus on input
 
 ---
 
