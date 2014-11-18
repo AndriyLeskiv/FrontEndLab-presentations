@@ -2,6 +2,7 @@ FrontEndLab-presentation
 ========================
 FrontEndLab presentation
 
+Hosted by github page : [http://iuckyman.github.io/FrontEndLab-presentations](http://iuckyman.github.io/FrontEndLab-presentations)
+
 TODO:   
-  1) add index.html page with list of contents/lessons  
-  2) make luckyman to host this with github pages
+- add index.html page with list of contents/lessons  
