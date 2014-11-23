@@ -37,8 +37,17 @@
   // Code goes here
 
   angular.module('students', [])
-    .controller('StudentsCtrl', function($scope, StudentsService) {
-      $scope.students = StudentsService.getStudents();
+    .controller('homeworksCtrl', function($scope, $interval, StudentsService, HomeworksService) {
+      var students = StudentsService.getStudents();
+      var homeworksCount = students[0].homeWorksScores.length;
+
+      $scope.homeworksLabels = HomeworksService.getHomeworksLabels(); 
+      $scope.students = students;
+      $scope.homeworkId = 0;
+
+      $interval(function(){
+        $scope.homeworkId = ($scope.homeworkId + 1) % homeworksCount;
+      }, 1000, homeworksCount-1);
     })
     .directive('barColored', function() {
       return {
@@ -50,14 +59,6 @@
               width: (attr.grade / attr.base)*100 + '%'            
             });
           });
-        }
-      }
-    })
-    .directive('loopGrades', function(){
-      return {
-        restrict: 'A',
-        link: function(scope, el, attr){
-           
         }
       }
     })
@@ -87,7 +88,7 @@
             sumScore: sData.shift(),
             aveScore: sData.shift(),
             homeworksDoneCount: sData.shift(),
-            homeWorksScores: sData.splice(1, sData.length-1) // no intro&outro
+            homeWorksScores: sData.splice(1, sData.length-2) // no intro&outro
           };
         });
       }
@@ -98,19 +99,29 @@
         }
       }      
     })
+    .factory('HomeworksService', function(){
+      var data = ["Intro", "HTML", "HTML 5", "CSS Styles", "CSS Layouts", "Forms", "Responsive", "CSS3", "Optimization", "Modern CSS", "JS intro", "Control flow", "Functions", "Data types", "DOM", "BOM", "Advanced Fun", "OOP", "Inheritance", "AJAX", "JQuery", "Tools", "Template", "Js Patterns", "MVC", "Perf. optimization", "JS Modules", "Backbone", "AngularJS", "ES6", "Outro"];
+      return {
+        getHomeworksLabels: function(){
+          return data.splice(1, data.length-2); // no intro&outro
+        }
+      }
+    })
   </script>
 </head>
 
-<body ng-app="students" ng-controller="StudentsCtrl">
+<body ng-app="students">
+<div ng-controller="homeworksCtrl">
+  <h3>{{homeworksLabels[homeworkId]}}</h3>
   <ul class="chart">
     <li ng-repeat="student in students"
         class="bar bar-colored"
-        loop-grades="homeWorksScores"
-        grade="{{student.homeWorksScores[0]}}"
+        grade="{{student.homeWorksScores[homeworkId]}}"
         direction="x"
         base="10">
-      <span class="label">{{student.name}} : {{student.testScore}}</span>
+      <span class="label">{{student.name}} : {{student.homeWorksScores[homeworkId]}}</span>
     </li>
   </ul>
+</div>
 </body>
 </html>
