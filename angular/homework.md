@@ -15,4 +15,4 @@
   - Select with homeworks should get unselected
   - *(note)* Test and homeworks have different max values (85 and 10)
 
-  NB! Completing this homework without 'advanced' tasks can not earn more than 7 points
+NB! Completing this homework without 'advanced' tasks can not earn more than 7 points
