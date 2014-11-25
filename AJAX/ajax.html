@@ -69,8 +69,6 @@ There ara couple Javascript object or HTML tags that can provide server-client c
 
 # Data formats
 
-- XMLHttpRequest
-
 - Text
     <pre class="brush: jscript">
         elem.innerText = xhr.responseText
@@ -89,7 +87,7 @@ There ara couple Javascript object or HTML tags that can provide server-client c
 
 - JSON (Javascript Object Notation)
     <pre class="brush: jscript">
-        var obj = eval( '(' + responseText + ')')
+        var obj = JSON.parse(responseText);
     </pre>
 
 - JSONP
@@ -180,55 +178,55 @@ FormData objects provide a way to easily construct a set of key/value pairs repr
 ***Browsers***: all, except IE< 10 
 ]
 
----
+<!------->
 
 
-# Script
-.litle[
-If you create a site SCRIPT referring to an external source, when added to the document, start the download process. In response, the server can send a script that contains the desired data. The main advantage of this method of communication is a cross-browser and the ability to access any domain.
-]
-<pre class="brush: jscript">
-    var CallbackRegistry = {}; 
-    function scriptRequest(url, onSuccess, onError) {  
-        var scriptOk = false;
-        var callbackName = 'f'+String(Math.random()).slice(2);  
-        url += url.indexOf('?') ? '&' : '?';  
-        url += 'callback=CallbackRegistry.'+callbackName;  
-        CallbackRegistry[callbackName] = function(data) {       
-           scriptOk = true;     
-           delete CallbackRegistry[callbackName];
-           onSuccess(data);
-        };  
-        function checkCallback() {     
-            if (scriptOk) return;     
-            delete CallbackRegistry[callbackName];    
-            onError(url);  
-        }   
-        var script = document.createElement('script'); 
-        //...
-</pre>
-
-
-
----
+<!--# Script-->
+<!--.litle[-->
+<!--If you create a site SCRIPT referring to an external source, when added to the document, start the download process. In response, the server can send a script that contains the desired data. The main advantage of this method of communication is a cross-browser and the ability to access any domain.-->
+<!--]-->
+<!--<pre class="brush: jscript">-->
+    <!--var CallbackRegistry = {}; -->
+    <!--function scriptRequest(url, onSuccess, onError) {  -->
+        <!--var scriptOk = false;-->
+        <!--var callbackName = 'f'+String(Math.random()).slice(2);  -->
+        <!--url += url.indexOf('?') ? '&' : '?';  -->
+        <!--url += 'callback=CallbackRegistry.'+callbackName;  -->
+        <!--CallbackRegistry[callbackName] = function(data) {       -->
+           <!--scriptOk = true;     -->
+           <!--delete CallbackRegistry[callbackName];-->
+           <!--onSuccess(data);-->
+        <!--};  -->
+        <!--function checkCallback() {     -->
+            <!--if (scriptOk) return;     -->
+            <!--delete CallbackRegistry[callbackName];    -->
+            <!--onError(url);  -->
+        <!--}   -->
+        <!--var script = document.createElement('script'); -->
+        <!--//...-->
+<!--</pre>-->
 
 
 
-# Script
+<!------->
 
-<pre class="brush: jscript">
-//...
-script.onreadystatechange = function() {  
-    if (this.readyState == 'complete' || this.readyState == 'loaded'){    
-                this.onreadystatechange = null;        
-                setTimeout(checkCallback, 0); 
-        }
-    }  
-    script.onload = script.onerror = checkCallback;  
-    script.src = url;   
-    document.body.appendChild(script); 
-}
-</pre>
+
+
+<!--# Script-->
+
+<!--<pre class="brush: jscript">-->
+<!--//...-->
+<!--script.onreadystatechange = function() {  -->
+    <!--if (this.readyState == 'complete' || this.readyState == 'loaded'){    -->
+                <!--this.onreadystatechange = null;        -->
+                <!--setTimeout(checkCallback, 0); -->
+        <!--}-->
+    <!--}  -->
+    <!--script.onload = script.onerror = checkCallback;  -->
+    <!--script.src = url;   -->
+    <!--document.body.appendChild(script); -->
+<!--}-->
+<!--</pre>-->
 
 
 ---
