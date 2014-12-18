@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lesson 30</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../assets/css/base.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <header>
+        <img class="epam-logo" src="../assets/img/logo.png"/>
+        <h1>ES6: Harmony</h1>
+    </header>
+
+<!-- ================== Slides ================== -->
+    <textarea id="source">
+
+
+class: center, middle
+
+.title[
+Front-end training
+# EcmaScript 6: Harmony
+]
+
+---
+
+# Iterators
+
+Iterator is an object that know how to access items from a collection one at a
+time, while keeping track of its current position within that sequence.
+
+Iterator object should implement `.next()` property which should retrun `{ done: bool, value: val }` object.
+
+If `done` is `true` iteration is finished.
+
+```
+for (let value of [1, 2, 3, 4, 5]) {
+  console.log(value);
+}
+
+```
+
+---
+
+# Generators
+
+Generators allows you build iterator with simple function.
+
+```
+function* seq(x, i = 0) {
+  if (i < x) {
+    yield i;
+    yield* seq(x, i + 1);
+  }
+}
+
+for (let i of seq(20)) {
+  console.log(i);
+}
+
+var gen = seq(3);
+console.log(gen.next().value); // 0
+console.log(gen.next().value); // 1
+console.log(gen.next().value); // 2
+```
+
+---
+
+# Modules
+
+```
+// module1.js
+export var name = 'Bond, James Bond';
+export function log() {
+  console.log([].join.call(arguments, ','));
+}
+```
+```
+// module2.js
+import {log,name} from './module1.js';
+log(name); // Bond, James Bond
+
+```
+---
+
+# Promises
+
+The Promise object is used for deffered and asynchronous computations.
+
+Promise object can be in next states:
+
+- _Pending_ inital state.
+- _Fulfilled_ operation successfull.
+- _Rejected_ operation failed.
+
+---
+
+# Promises (pt. 2)
+
+Usage:
+```
+var promise = new Promise(function(resolve, reject) {
+  setTimeout(function() {
+    var i = Math.random();
+    if (i < 0.5) {
+      reject(i);
+    } else {
+      resolve();
+    }
+  }, 2000);
+});
+
+promise.then(
+  function(i) {
+    console.log('accepted,', i, 'is greater than 0.5');
+  },
+  function(i) {
+    console.log('rejected,', i, 'is lesser than 0.5');
+  });
+```
+
+---
+
+# Promises (pt. 3)
+
+`Promise.all([p1, p2, ..., pn])` returns a promise which will be resolved when all promises are resolved.
+
+`Promise.race([p1, p2, ..., pn])` returns a promise that resolves/rejects as soon as any of promises resolves/rejects.
+
+`Promise.reject(reason)` returns a rejected promise.
+
+`Promise.resolve(value)` returns a resolved promise.
+
+---
+
+# Block scoping
+
+```
+{
+  const t = 1;
+  console.log(t); // 1
+}
+console.log(t); // error: 't' is not defined
+```
+
+```
+for (let i of [1, 2, 3]) {
+  console.log(i);
+} // -> 1, 2, 3
+```
+---
+
+# Destructive assigment
+```
+var [a, b, [c, d]] = [1, 2, [3, 4]];
+console.log(a, b, c, d); // 1, 2, 3, 4
+```
+
+```
+var point = { x: 1, y: 2 };
+var {x, y} = point;
+console.log(x, y); // 1, 2
+```
+---
+
+# Arrow functions
+
+```
+var square = (x) => {
+  return x * x;
+};
+
+square(2); // 4
+
+// implicit return
+square = (x) => x * x;
+```
+
+```
+window.addEventListener('click', (e) => {
+  var {x, y} = e;
+  console.log('clicked at', x, y)
+});
+```
+
+```
+[1, 2, 3, 4, 5, 6, 7, 8, 9].filter((x) => x % 2 == 0);
+```
+
+---
+
+# Template syntax
+
+```
+var name = 'Bond';
+var string = '${name}, James ${name}';
+console.log(string); // Bond, James Bond
+```
+---
+
+# Classes
+```
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+  makeSound() {
+    console.log(this.name);
+  }
+}
+
+class Cat extends Animal {
+  constructor(name) {
+    super(name);
+  }
+  makeSound() {
+    super.makeSound();
+    console.log('meow');
+  }
+}
+
+var cat = new Cat('mr. Biggles');
+cat.makeSound(); // mr. Biggles, meow
+```
+---
+
+# Transpilers
+
+Transpilers used to translate from ES5 to ES6.
+
+[Traceur](https://github.com/google/traceur-compiler/)
+
+```npm install -g traceur```
+
+[ES6-Transpiler](https://github.com/termi/es6-transpiler)
+
+```npm install -g es6-transpiler```
+
+
+
+    </textarea>
+<!-- ================== End of Slides ================== -->
+
+    <script src="../assets/js/remark-latest.min.js" type="text/javascript"></script>
+    <script type="text/javascript">remark.create({
+      highlightStyle: 'github',
+      highlightLanguage: 'javascript'
+    });</script>
+</body>
+</html>
